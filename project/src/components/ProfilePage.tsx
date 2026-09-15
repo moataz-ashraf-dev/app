@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Lock, Star, Sparkles, Coins, Gem, Clock3, Shirt, Crown, Car, Glasses, User, Pencil } from 'lucide-react';
+import { Lock, Star, Sparkles, Coins, Gem, Clock3, Shirt, Crown, Car, Glasses, User, Pencil, Timer } from 'lucide-react';
 import { store } from '@/lib/store';
 import { profileStore, PET_CATALOG, SKIN_CATALOG, SKIN_CATEGORIES, type ProfileData, type SkinCategory } from '@/lib/profileStore';
 import { type LanguageCode, type TranslationKey, translatePetName, translateRarity, translateSkinName, translateSkinCategory } from '@/lib/i18n';
@@ -12,6 +12,7 @@ const RARITY_STYLES: Record<string, string> = {
 };
 const STARS_PER_COMPLETED_SESSION = 5;
 const STARS_PER_LEVEL = 50;
+const STUDY_HOURS_GOAL = 20;
 
 const AVATAR_PRESETS = ['🐉', '🐺', '🦊', '🐢'] as const;
 const PROFILE_HEADER_KEY = 'studyquest_profile_header_v1';
@@ -108,6 +109,77 @@ export default function ProfilePage({ language, t }: Props) {
         <div className="flex items-center gap-3 flex-wrap justify-center">
           <div className="flex items-center gap-2 px-4 py-2 rounded-xl glass border border-white/10"><Sparkles className="w-4 h-4 text-neon-cyan" /><span className="text-xs text-gray-500">{t('studentLevel')}</span><span className="font-mono font-bold text-sm text-neon-cyan neon-text-cyan">{studentLevel}</span></div>
           <div className="flex items-center gap-2 px-4 py-2 rounded-xl glass border border-white/10"><Star className="w-4 h-4 text-neon-amber fill-neon-amber" /><span className="text-xs text-gray-500">{t('lifetimeGoldenStars')}</span><span className="font-mono font-bold text-sm text-neon-amber neon-text-amber">{lifetimeStars.toLocaleString()}</span></div>
+        </div>
+      </section>
+
+      <section className="w-full">
+        <h2 className="font-display font-bold text-lg text-gray-200 mb-4">{t('interactiveStats')}</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="group relative rounded-2xl glass border border-white/10 p-5 overflow-hidden transition-all duration-500 hover:border-neon-emerald/40 hover:scale-[1.02]">
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ background: 'radial-gradient(circle at 50% 40%, rgba(0, 255, 157, 0.10), transparent 70%)' }} />
+            <div className="relative flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-9 h-9 rounded-xl bg-neon-emerald/10 border border-neon-emerald/20 flex items-center justify-center"><Timer className="w-5 h-5 text-neon-emerald" /></div>
+                  <div className="flex flex-col">
+                    <span className="font-display font-bold text-sm text-gray-200">{t('studyHoursGoal')}</span>
+                    <span className="text-[10px] text-gray-500">{t('studyHoursSubtitle')}</span>
+                  </div>
+                </div>
+                <span className="text-2xl">⏱️</span>
+              </div>
+              <div className="flex items-end gap-1.5">
+                <span className="font-mono font-bold text-2xl text-neon-emerald neon-text-emerald">{studyHours.toLocaleString()}h</span>
+                <span className="text-xs text-gray-500 mb-1">/ {STUDY_HOURS_GOAL}h</span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <div className="w-full h-2.5 rounded-full bg-white/5 overflow-hidden">
+                  <div className="h-full rounded-full bg-gradient-to-r from-neon-emerald to-neon-cyan transition-all duration-700" style={{ width: `${Math.min(100, (studyHours / STUDY_HOURS_GOAL) * 100)}%`, boxShadow: '0 0 12px rgba(0, 255, 157, 0.5)' }} />
+                </div>
+                <span className="text-[10px] text-gray-500">{t('goalProgress')}: {Math.min(100, Math.round((studyHours / STUDY_HOURS_GOAL) * 100))}%</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="group relative rounded-2xl glass border border-white/10 p-5 overflow-hidden transition-all duration-500 hover:border-neon-amber/40 hover:scale-[1.02]">
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ background: 'radial-gradient(circle at 50% 40%, rgba(255, 170, 0, 0.10), transparent 70%)' }} />
+            <div className="relative flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-9 h-9 rounded-xl bg-neon-amber/10 border border-neon-amber/20 flex items-center justify-center"><Coins className="w-5 h-5 text-neon-amber" /></div>
+                  <div className="flex flex-col">
+                    <span className="font-display font-bold text-sm text-gray-200">{t('coinsEarned')}</span>
+                    <span className="text-[10px] text-gray-500">{t('coinsEarnedSubtitle')}</span>
+                  </div>
+                </div>
+                <span className="text-2xl">🪙</span>
+              </div>
+              <span className="font-mono font-bold text-2xl text-neon-amber neon-text-amber">{coins.toLocaleString()}</span>
+              <div className="h-2.5 rounded-full bg-white/5 overflow-hidden">
+                <div className="h-full rounded-full bg-gradient-to-r from-neon-amber to-neon-rose transition-all duration-700" style={{ width: `${Math.min(100, (coins / 5000) * 100)}%`, boxShadow: '0 0 12px rgba(255, 170, 0, 0.4)' }} />
+              </div>
+            </div>
+          </div>
+
+          <div className="group relative rounded-2xl glass border border-white/10 p-5 overflow-hidden transition-all duration-500 hover:border-neon-cyan/40 hover:scale-[1.02]">
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ background: 'radial-gradient(circle at 50% 40%, rgba(0, 240, 255, 0.10), transparent 70%)' }} />
+            <div className="relative flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-9 h-9 rounded-xl bg-neon-cyan/10 border border-neon-cyan/20 flex items-center justify-center"><Gem className="w-5 h-5 text-neon-cyan" /></div>
+                  <div className="flex flex-col">
+                    <span className="font-display font-bold text-sm text-gray-200">{t('gemsCollected')}</span>
+                    <span className="text-[10px] text-gray-500">{t('gemsCollectedSubtitle')}</span>
+                  </div>
+                </div>
+                <span className="text-2xl">💎</span>
+              </div>
+              <span className="font-mono font-bold text-2xl text-neon-cyan neon-text-cyan" style={{ textShadow: '0 0 10px rgba(0, 240, 255, 0.5), 0 0 20px rgba(0, 240, 255, 0.2), 0 -4px 12px rgba(0, 240, 255, 0.15)' }}>{gems.toLocaleString()}</span>
+              <div className="h-2.5 rounded-full bg-white/5 overflow-hidden">
+                <div className="h-full rounded-full bg-gradient-to-r from-neon-cyan to-neon-emerald transition-all duration-700" style={{ width: `${Math.min(100, (gems / 50) * 100)}%`, boxShadow: '0 0 12px rgba(0, 240, 255, 0.4)' }} />
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

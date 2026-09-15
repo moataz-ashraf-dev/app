@@ -31,7 +31,8 @@ export type TranslationKey =
   | 'localMockNotice' | 'roomDescriptionPhysics' | 'roomDescriptionCalculus' | 'roomDescriptionJavaScript'
   | 'roomDescriptionEnglish' | 'roomDescriptionChemistry' | 'roomDescriptionExam' | 'secureLocalLounge'
   | 'noRealVoiceConnection' | 'globalStudents' | 'regionalStudents'
-  | 'displayName' | 'chooseAvatar';
+  | 'displayName' | 'chooseAvatar'
+  | 'interactiveStats' | 'studyHoursGoal' | 'studyHoursSubtitle' | 'coinsEarned' | 'coinsEarnedSubtitle' | 'gemsCollected' | 'gemsCollectedSubtitle' | 'goalProgress';
 
 type TranslationDictionary = Record<LanguageCode, Record<TranslationKey, string>>;
 
@@ -66,6 +67,7 @@ export const TRANSLATIONS: TranslationDictionary = {
     roomDescriptionEnglish: 'Practice English conversation in a study-focused room.', roomDescriptionChemistry: 'Chemistry revision, formulas, and focused problem sets.', roomDescriptionExam: 'Quiet exam preparation and revision planning.', secureLocalLounge: 'Local safety layer',
     noRealVoiceConnection: 'No real-time voice connection', globalStudents: 'Global Students', regionalStudents: 'Regional Students',
     displayName: 'Display Name', chooseAvatar: 'Choose Your Avatar',
+    interactiveStats: 'Interactive Stats', studyHoursGoal: 'Study Hours', studyHoursSubtitle: 'Hours focused this week', coinsEarned: 'Coins Earned', coinsEarnedSubtitle: 'Total currency collected', gemsCollected: 'Gems Collected', gemsCollectedSubtitle: 'Premium rewards earned', goalProgress: 'Goal progress',
   },
   de: {
     loadingStudyQuest: 'StudyQuest wird geladen...', studyDashboard: 'Lern-Dashboard', myProfile: 'Mein Profil',
@@ -96,6 +98,7 @@ export const TRANSLATIONS: TranslationDictionary = {
     roomDescriptionEnglish: 'Englische Konversation in einem lernorientierten Raum üben.', roomDescriptionChemistry: 'Chemie-Wiederholung, Formeln und konzentrierte Aufgaben.', roomDescriptionExam: 'Ruhige Prüfungsvorbereitung und Lernplanung.', secureLocalLounge: 'Lokale Sicherheitsebene',
     noRealVoiceConnection: 'Keine Echtzeit-Sprachverbindung', globalStudents: 'Globale Schüler', regionalStudents: 'Regionale Schüler',
     displayName: 'Anzeigename', chooseAvatar: 'Wähle deinen Avatar',
+    interactiveStats: 'Interaktive Statistiken', studyHoursGoal: 'Lernstunden', studyHoursSubtitle: 'Fokusstunden diese Woche', coinsEarned: 'Verdiente Münzen', coinsEarnedSubtitle: 'Gesammelte Währung', gemsCollected: 'Gesammelte Edelsteine', gemsCollectedSubtitle: 'Premium-Belohnungen', goalProgress: 'Zielfortschritt',
   },
   ja: {
     loadingStudyQuest: 'StudyQuestを読み込んでいます...', studyDashboard: '学習ダッシュボード', myProfile: 'マイプロフィール',
@@ -123,6 +126,7 @@ export const TRANSLATIONS: TranslationDictionary = {
     roomDescriptionEnglish: '学習に集中した部屋で英会話を練習します。', roomDescriptionChemistry: '化学の復習、公式、集中問題演習です。', roomDescriptionExam: '静かな試験対策と復習計画のための部屋です。', secureLocalLounge: 'ローカル安全レイヤー',
     noRealVoiceConnection: 'リアルタイム音声接続なし', globalStudents: '世界の学生', regionalStudents: '地域の学生',
     displayName: '表示名', chooseAvatar: 'アバターを選択',
+    interactiveStats: 'インタラクティブ統計', studyHoursGoal: '学習時間', studyHoursSubtitle: '今週の集中時間', coinsEarned: '獲得コイン', coinsEarnedSubtitle: '獲得した通貨', gemsCollected: '収集したジェム', gemsCollectedSubtitle: 'プレミアム報酬', goalProgress: '目標の進捗',
   },
   ar: {
     loadingStudyQuest: 'جارٍ تحميل StudyQuest...', studyDashboard: 'لوحة الدراسة', myProfile: 'ملفي الشخصي',
@@ -150,6 +154,7 @@ export const TRANSLATIONS: TranslationDictionary = {
     roomDescriptionEnglish: 'تدرّب على المحادثة الإنجليزية في غرفة مخصصة للدراسة.', roomDescriptionChemistry: 'مراجعة الكيمياء والقوانين وحل المسائل بتركيز.', roomDescriptionExam: 'استعداد هادئ للامتحانات وتخطيط المراجعة.', secureLocalLounge: 'طبقة أمان محلية',
     noRealVoiceConnection: 'لا يوجد اتصال صوتي مباشر', globalStudents: 'الطلاب عالميًا', regionalStudents: 'الطلاب إقليميًا',
     displayName: 'اسم العرض', chooseAvatar: 'اختر صورتك الرمزية',
+    interactiveStats: 'إحصائات تفاعلية', studyHoursGoal: 'ساعات الدراسة', studyHoursSubtitle: 'ساعات التركيز هذا الأسبوع', coinsEarned: 'العملات المكتسبة', coinsEarnedSubtitle: 'إجمالي العملات المجموعة', gemsCollected: 'الجواهر المجموعة', gemsCollectedSubtitle: 'مكافآت مميزة مكتسبة', goalProgress: 'تقدم الهدف',
   },
   fr: {
     loadingStudyQuest: 'Chargement de StudyQuest...', studyDashboard: 'Tableau de bord', myProfile: 'Mon profil',
@@ -177,6 +182,7 @@ export const TRANSLATIONS: TranslationDictionary = {
     roomDescriptionEnglish: 'Pratiquez la conversation anglaise dans une salle axée sur les études.', roomDescriptionChemistry: 'Révision de chimie, formules et exercices ciblés.', roomDescriptionExam: 'Préparation calme aux examens et planification des révisions.', secureLocalLounge: 'Couche de sécurité locale',
     noRealVoiceConnection: 'Aucune connexion vocale en temps réel', globalStudents: 'Élèves du monde', regionalStudents: 'Élèves de la région',
     displayName: 'Nom affiché', chooseAvatar: 'Choisis ton avatar',
+    interactiveStats: 'Statistiques interactives', studyHoursGoal: 'Heures d’étude', studyHoursSubtitle: 'Heures de concentration cette semaine', coinsEarned: 'Pièces gagnées', coinsEarnedSubtitle: 'Monnaie totale collectée', gemsCollected: 'Gemmes collectées', gemsCollectedSubtitle: 'Récompenses premium gagnées', goalProgress: 'Progression de l’objectif',
   },
 };
 
