@@ -8,7 +8,7 @@
 
 const PROFILE_STORAGE_KEY = 'studyquest_profile_v1';
 
-export type PetRarity = 'Common' | 'Rare' | 'Epic' | 'Legendary';
+export type PetRarity = 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Mythic';
 
 export type SkinCategory = 'clothes' | 'glasses' | 'crown' | 'vehicle';
 
@@ -24,6 +24,7 @@ export type SkinDefinition = {
   id: string;
   name: string;
   category: SkinCategory;
+  rarity: PetRarity;
   emoji: string;
   unlockedByDefault: boolean;
 };
@@ -47,14 +48,14 @@ export const PET_CATALOG: PetDefinition[] = [
 ];
 
 export const SKIN_CATALOG: SkinDefinition[] = [
-  { id: 'cyber-hoodie', name: 'Cyber Hoodie', category: 'clothes', emoji: '🧥', unlockedByDefault: true },
-  { id: 'neon-shades', name: 'Neon Shades', category: 'glasses', emoji: '🕶️', unlockedByDefault: true },
-  { id: 'gold-crown', name: 'Golden Crown', category: 'crown', emoji: '👑', unlockedByDefault: true },
-  { id: 'horse', name: 'Horse', category: 'vehicle', emoji: '🐎', unlockedByDefault: true },
-  { id: 'lada', name: 'Lada', category: 'vehicle', emoji: '🚗', unlockedByDefault: true },
-  { id: 'winter-scarf', name: 'Winter Scarf', category: 'clothes', emoji: '🧣', unlockedByDefault: false },
-  { id: 'fancy-monocle', name: 'Fancy Monocle', category: 'glasses', emoji: '🧐', unlockedByDefault: false },
-  { id: 'wizard-hat', name: 'Wizard Hat', category: 'crown', emoji: '🧙', unlockedByDefault: false },
+  { id: 'cyber-hoodie', name: 'Cyber Hoodie', category: 'clothes', rarity: 'Rare', emoji: '🧥', unlockedByDefault: true },
+  { id: 'neon-shades', name: 'Neon Shades', category: 'glasses', rarity: 'Rare', emoji: '🕶️', unlockedByDefault: true },
+  { id: 'gold-crown', name: 'Golden Crown', category: 'crown', rarity: 'Legendary', emoji: '👑', unlockedByDefault: true },
+  { id: 'horse', name: 'Horse', category: 'vehicle', rarity: 'Common', emoji: '🐎', unlockedByDefault: true },
+  { id: 'lada', name: 'Lada', category: 'vehicle', rarity: 'Common', emoji: '🚗', unlockedByDefault: true },
+  { id: 'winter-scarf', name: 'Winter Scarf', category: 'clothes', rarity: 'Epic', emoji: '🧣', unlockedByDefault: false },
+  { id: 'fancy-monocle', name: 'Fancy Monocle', category: 'glasses', rarity: 'Epic', emoji: '🧐', unlockedByDefault: false },
+  { id: 'wizard-hat', name: 'Wizard Hat', category: 'crown', rarity: 'Mythic', emoji: '🧙', unlockedByDefault: false },
 ];
 
 export const SKIN_CATEGORIES: SkinCategory[] = ['clothes', 'glasses', 'crown', 'vehicle'];

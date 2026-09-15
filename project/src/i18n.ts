@@ -32,7 +32,8 @@ export type TranslationKey =
   | 'roomDescriptionEnglish' | 'roomDescriptionChemistry' | 'roomDescriptionExam' | 'secureLocalLounge'
   | 'noRealVoiceConnection' | 'globalStudents' | 'regionalStudents'
   | 'displayName' | 'chooseAvatar'
-  | 'interactiveStats' | 'studyHoursGoal' | 'studyHoursSubtitle' | 'coinsEarned' | 'coinsEarnedSubtitle' | 'gemsCollected' | 'gemsCollectedSubtitle' | 'goalProgress';
+  | 'interactiveStats' | 'studyHoursGoal' | 'studyHoursSubtitle' | 'coinsEarned' | 'coinsEarnedSubtitle' | 'gemsCollected' | 'gemsCollectedSubtitle' | 'goalProgress'
+  | 'companionsTab' | 'skinsTab' | 'equip' | 'equipped' | 'rarityAll' | 'rarityMythic' | 'inventorySection' | 'skinType' | 'petType' | 'unequip';
 
 type TranslationDictionary = Record<LanguageCode, Record<TranslationKey, string>>;
 
@@ -68,6 +69,7 @@ export const TRANSLATIONS: TranslationDictionary = {
     noRealVoiceConnection: 'No real-time voice connection', globalStudents: 'Global Students', regionalStudents: 'Regional Students',
     displayName: 'Display Name', chooseAvatar: 'Choose Your Avatar',
     interactiveStats: 'Interactive Stats', studyHoursGoal: 'Study Hours', studyHoursSubtitle: 'Hours focused this week', coinsEarned: 'Coins Earned', coinsEarnedSubtitle: 'Total currency collected', gemsCollected: 'Gems Collected', gemsCollectedSubtitle: 'Premium rewards earned', goalProgress: 'Goal progress',
+    companionsTab: 'Companions', skinsTab: 'Character Skins', equip: 'Equip', unequip: 'Unequip', rarityAll: 'All', rarityMythic: 'Mythic', inventorySection: 'Inventory', skinType: 'Skin', petType: 'Pet',
   },
   de: {
     loadingStudyQuest: 'StudyQuest wird geladen...', studyDashboard: 'Lern-Dashboard', myProfile: 'Mein Profil',
@@ -99,6 +101,7 @@ export const TRANSLATIONS: TranslationDictionary = {
     noRealVoiceConnection: 'Keine Echtzeit-Sprachverbindung', globalStudents: 'Globale Schüler', regionalStudents: 'Regionale Schüler',
     displayName: 'Anzeigename', chooseAvatar: 'Wähle deinen Avatar',
     interactiveStats: 'Interaktive Statistiken', studyHoursGoal: 'Lernstunden', studyHoursSubtitle: 'Fokusstunden diese Woche', coinsEarned: 'Verdiente Münzen', coinsEarnedSubtitle: 'Gesammelte Währung', gemsCollected: 'Gesammelte Edelsteine', gemsCollectedSubtitle: 'Premium-Belohnungen', goalProgress: 'Zielfortschritt',
+    companionsTab: 'Begleiter', skinsTab: 'Charakter-Skins', equip: 'Ausrüsten', unequip: 'Ablegen', rarityAll: 'Alle', rarityMythic: 'Mythisch', inventorySection: 'Inventar', skinType: 'Skin', petType: 'Haustier',
   },
   ja: {
     loadingStudyQuest: 'StudyQuestを読み込んでいます...', studyDashboard: '学習ダッシュボード', myProfile: 'マイプロフィール',
@@ -127,6 +130,7 @@ export const TRANSLATIONS: TranslationDictionary = {
     noRealVoiceConnection: 'リアルタイム音声接続なし', globalStudents: '世界の学生', regionalStudents: '地域の学生',
     displayName: '表示名', chooseAvatar: 'アバターを選択',
     interactiveStats: 'インタラクティブ統計', studyHoursGoal: '学習時間', studyHoursSubtitle: '今週の集中時間', coinsEarned: '獲得コイン', coinsEarnedSubtitle: '獲得した通貨', gemsCollected: '収集したジェム', gemsCollectedSubtitle: 'プレミアム報酬', goalProgress: '目標の進捗',
+    companionsTab: '仲間', skinsTab: 'キャラクタースキン', equip: '装備', unequip: '装備解除', rarityAll: 'すべて', rarityMythic: '神話', inventorySection: '在庫', skinType: 'スキン', petType: 'ペット',
   },
   ar: {
     loadingStudyQuest: 'جارٍ تحميل StudyQuest...', studyDashboard: 'لوحة الدراسة', myProfile: 'ملفي الشخصي',
@@ -155,6 +159,7 @@ export const TRANSLATIONS: TranslationDictionary = {
     noRealVoiceConnection: 'لا يوجد اتصال صوتي مباشر', globalStudents: 'الطلاب عالميًا', regionalStudents: 'الطلاب إقليميًا',
     displayName: 'اسم العرض', chooseAvatar: 'اختر صورتك الرمزية',
     interactiveStats: 'إحصائات تفاعلية', studyHoursGoal: 'ساعات الدراسة', studyHoursSubtitle: 'ساعات التركيز هذا الأسبوع', coinsEarned: 'العملات المكتسبة', coinsEarnedSubtitle: 'إجمالي العملات المجموعة', gemsCollected: 'الجواهر المجموعة', gemsCollectedSubtitle: 'مكافآت مميزة مكتسبة', goalProgress: 'تقدم الهدف',
+    companionsTab: 'الرفقاء', skinsTab: 'أشكال الشخصية', equip: 'تجهيز', unequip: 'إزالة', rarityAll: 'الكل', rarityMythic: 'أسطوري', inventorySection: 'المخزون', skinType: 'شكل', petType: 'حيوان',
   },
   fr: {
     loadingStudyQuest: 'Chargement de StudyQuest...', studyDashboard: 'Tableau de bord', myProfile: 'Mon profil',
@@ -183,6 +188,7 @@ export const TRANSLATIONS: TranslationDictionary = {
     noRealVoiceConnection: 'Aucune connexion vocale en temps réel', globalStudents: 'Élèves du monde', regionalStudents: 'Élèves de la région',
     displayName: 'Nom affiché', chooseAvatar: 'Choisis ton avatar',
     interactiveStats: 'Statistiques interactives', studyHoursGoal: 'Heures d’étude', studyHoursSubtitle: 'Heures de concentration cette semaine', coinsEarned: 'Pièces gagnées', coinsEarnedSubtitle: 'Monnaie totale collectée', gemsCollected: 'Gemmes collectées', gemsCollectedSubtitle: 'Récompenses premium gagnées', goalProgress: 'Progression de l’objectif',
+    companionsTab: 'Compagnons', skinsTab: 'Skins de personnage', equip: 'Équiper', unequip: 'Retirer', rarityAll: 'Tous', rarityMythic: 'Mythique', inventorySection: 'Inventaire', skinType: 'Skin', petType: 'Animal',
   },
 };
 
@@ -237,6 +243,7 @@ export const RARITY_TRANSLATIONS: Record<string, Record<LanguageCode, string>> =
   Rare: { en: 'Rare', de: 'Selten', ja: 'レア', ar: 'نادر', fr: 'Rare' },
   Epic: { en: 'Epic', de: 'Episch', ja: 'エピック', ar: 'ملحمي', fr: 'Épique' },
   Legendary: { en: 'Legendary', de: 'Legendär', ja: 'レジェンド', ar: 'أسطوري', fr: 'Légendaire' },
+  Mythic: { en: 'Mythic', de: 'Mythisch', ja: '神話', ar: 'خرافي', fr: 'Mythique' },
 };
 
 export const SKIN_CATEGORY_TRANSLATIONS: Record<string, Record<LanguageCode, string>> = {

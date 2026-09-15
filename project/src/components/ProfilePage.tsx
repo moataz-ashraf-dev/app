@@ -6,9 +6,40 @@ import { type LanguageCode, type TranslationKey, translatePetName, translateRari
 import MonsterViewport from '@/components/MonsterViewport';
 
 const CATEGORY_ICONS: Record<SkinCategory, typeof Shirt> = { clothes: Shirt, glasses: Glasses, crown: Crown, vehicle: Car };
+
+type RarityKey = 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Mythic';
+const RARITY_ORDER: RarityKey[] = ['Common', 'Rare', 'Epic', 'Legendary', 'Mythic'];
+
 const RARITY_STYLES: Record<string, string> = {
-  Common: 'text-gray-400 border-gray-400/30 bg-gray-400/5', Rare: 'text-neon-cyan border-neon-cyan/30 bg-neon-cyan/5',
-  Epic: 'text-neon-violet border-neon-violet/30 bg-neon-violet/5', Legendary: 'text-neon-amber border-neon-amber/30 bg-neon-amber/5',
+  Common: 'text-gray-400 border-gray-400/30 bg-gray-400/5',
+  Rare: 'text-neon-cyan border-neon-cyan/30 bg-neon-cyan/5',
+  Epic: 'text-neon-violet border-neon-violet/30 bg-neon-violet/5',
+  Legendary: 'text-neon-amber border-neon-amber/30 bg-neon-amber/5',
+  Mythic: 'text-neon-rose border-neon-rose/30 bg-neon-rose/5',
+};
+
+const RARITY_GLOW: Record<string, string> = {
+  Common: '',
+  Rare: 'group-hover:border-neon-cyan/50 group-hover:shadow-[0_0_20px_rgba(0,240,255,0.15)]',
+  Epic: 'group-hover:border-neon-violet/50 group-hover:shadow-[0_0_20px_rgba(177,77,255,0.15)]',
+  Legendary: 'group-hover:border-neon-amber/50 group-hover:shadow-[0_0_20px_rgba(255,170,0,0.15)]',
+  Mythic: 'group-hover:border-neon-rose/50 group-hover:shadow-[0_0_20px_rgba(255,61,113,0.15)]',
+};
+
+const RARITY_TEXT_GLOW: Record<string, string> = {
+  Common: '',
+  Rare: 'text-neon-cyan',
+  Epic: 'text-neon-violet',
+  Legendary: 'text-neon-amber',
+  Mythic: 'text-neon-rose',
+};
+
+const RARITY_CHIP_ACTIVE: Record<string, string> = {
+  Common: 'border-gray-400/50 bg-gray-400/10 text-gray-300',
+  Rare: 'border-neon-cyan/50 bg-neon-cyan/10 text-neon-cyan',
+  Epic: 'border-neon-violet/50 bg-neon-violet/10 text-neon-violet',
+  Legendary: 'border-neon-amber/50 bg-neon-amber/10 text-neon-amber',
+  Mythic: 'border-neon-rose/50 bg-neon-rose/10 text-neon-rose',
 };
 const STARS_PER_COMPLETED_SESSION = 5;
 const STARS_PER_LEVEL = 50;
@@ -37,6 +68,8 @@ export default function ProfilePage({ language, t }: Props) {
   const [profile, setProfile] = useState<ProfileData>(() => profileStore.load());
   const [name, setName] = useState(() => loadHeaderState().name);
   const [selectedAvatar, setSelectedAvatar] = useState(() => loadHeaderState().selectedAvatar);
+  const [inventoryTab, setInventoryTab] = useState<'pets' | 'skins'>('pets');
+  const [rarityFilter, setRarityFilter] = useState<string>('all');
 
   useEffect(() => {
     const local = store.load();
@@ -55,6 +88,23 @@ export default function ProfilePage({ language, t }: Props) {
   const activePet = PET_CATALOG.find((p) => p.id === profile.equippedPetId) ?? PET_CATALOG[0];
   const activePetDisplayName = activePet.id === 'sparky' ? petName : activePet.name;
   const equippedSkinDefs = SKIN_CATEGORIES.map((cat) => SKIN_CATALOG.find((s) => s.id === profile.equippedSkins[cat]) ?? null);
+
+  const availableRarities = useMemo(() => {
+    const set = new Set<string>();
+    if (inventoryTab === 'pets') {
+      PET_CATALOG.forEach((p) => set.add(p.rarity));
+    } else {
+      SKIN_CATALOG.forEach((s) => set.add(s.rarity));
+    }
+    return RARITY_ORDER.filter((r) => set.has(r));
+  }, [inventoryTab]);
+
+  const filteredPets = useMemo(() =>
+    PET_CATALOG.filter((p) => rarityFilter === 'all' || p.rarity === rarityFilter),
+  [rarityFilter]);
+  const filteredSkins = useMemo(() =>
+    SKIN_CATALOG.filter((s) => rarityFilter === 'all' || s.rarity === rarityFilter),
+  [rarityFilter]);
 
   return (
     <div className="flex flex-col items-center gap-10 animate-fade-in pb-8">
@@ -192,36 +242,134 @@ export default function ProfilePage({ language, t }: Props) {
         </div>
       </section>
 
-      <section className="w-full flex flex-col gap-8">
-        <div>
-          <h2 className="font-display font-bold text-lg text-gray-200 mb-4">{t('unlockedPets')}</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-            {PET_CATALOG.map((pet) => {
-              const unlocked = profile.unlockedPetIds.includes(pet.id); const isEquipped = profile.equippedPetId === pet.id;
-              const rarityStyle = RARITY_STYLES[pet.rarity] ?? RARITY_STYLES.Common;
-              return <button key={pet.id} type="button" disabled={!unlocked} onClick={() => setProfile(profileStore.setEquippedPet(pet.id))} className={`relative rounded-2xl border p-4 flex flex-col items-center gap-2 transition-all duration-300 ${!unlocked ? 'border-white/5 bg-white/[0.02] opacity-50 cursor-not-allowed' : isEquipped ? 'border-neon-cyan/50 bg-neon-cyan/5 neon-border-cyan cursor-pointer' : 'border-white/10 bg-ink-700/40 hover:border-white/20 hover:bg-white/[0.04] cursor-pointer'}`}>
-                {!unlocked && <div className="absolute top-2 right-2 text-gray-500"><Lock className="w-3.5 h-3.5" /></div>}
-                {isEquipped && <div className="absolute top-2 left-2 text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/30">{t('active')}</div>}
-                <div className={`text-4xl mt-2 ${!unlocked ? 'grayscale' : ''}`}>{pet.emoji}</div><span className="text-xs font-medium text-gray-200 text-center">{translatePetName(pet.name, language)}</span><span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${rarityStyle}`}>{translateRarity(pet.rarity, language)}</span>
-              </button>;
-            })}
+      <section className="w-full flex flex-col gap-5">
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <h2 className="font-display font-bold text-lg text-gray-200">{t('inventorySection')}</h2>
+          <div className="inline-flex p-1 rounded-xl glass border border-white/10">
+            <button
+              type="button"
+              onClick={() => { setInventoryTab('pets'); setRarityFilter('all'); }}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all duration-300 ${inventoryTab === 'pets' ? 'bg-neon-cyan/10 text-neon-cyan neon-border-cyan' : 'text-gray-500 hover:text-gray-300'}`}
+            >
+              <Sparkles className="w-4 h-4" />
+              {t('companionsTab')}
+            </button>
+            <button
+              type="button"
+              onClick={() => { setInventoryTab('skins'); setRarityFilter('all'); }}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all duration-300 ${inventoryTab === 'skins' ? 'bg-neon-emerald/10 text-neon-emerald neon-border-emerald' : 'text-gray-500 hover:text-gray-300'}`}
+            >
+              <Shirt className="w-4 h-4" />
+              {t('skinsTab')}
+            </button>
           </div>
         </div>
 
-        <div>
-          <h2 className="font-display font-bold text-lg text-gray-200 mb-4">{t('equipmentApparel')}</h2>
+        <div className="flex items-center gap-2 flex-wrap">
+          <button
+            type="button"
+            onClick={() => setRarityFilter('all')}
+            className={`px-3 py-1.5 rounded-full text-[11px] font-bold border transition-all duration-300 ${rarityFilter === 'all' ? 'border-white/30 bg-white/10 text-gray-200' : 'border-white/10 text-gray-500 hover:text-gray-300 hover:border-white/20'}`}
+          >
+            {t('rarityAll')}
+          </button>
+          {availableRarities.map((rarity) => (
+            <button
+              key={rarity}
+              type="button"
+              onClick={() => setRarityFilter(rarity)}
+              className={`px-3 py-1.5 rounded-full text-[11px] font-bold border transition-all duration-300 ${rarityFilter === rarity ? (RARITY_CHIP_ACTIVE[rarity] ?? '') : 'border-white/10 text-gray-500 hover:text-gray-300 hover:border-white/20'}`}
+            >
+              {translateRarity(rarity, language)}
+            </button>
+          ))}
+        </div>
+
+        {inventoryTab === 'pets' && (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-            {SKIN_CATALOG.map((skin) => {
-              const unlocked = profile.unlockedSkinIds.includes(skin.id); const isEquipped = profile.equippedSkins[skin.category] === skin.id; const CategoryIcon = CATEGORY_ICONS[skin.category];
-              return <button key={skin.id} type="button" disabled={!unlocked} onClick={() => setProfile(profileStore.toggleEquipSkin(skin.id))} className={`relative rounded-2xl border p-4 flex flex-col items-center gap-2 transition-all duration-300 ${!unlocked ? 'border-white/5 bg-white/[0.02] opacity-50 cursor-not-allowed' : isEquipped ? 'border-neon-emerald/50 bg-neon-emerald/5 neon-border-emerald cursor-pointer' : 'border-white/10 bg-ink-700/40 hover:border-white/20 hover:bg-white/[0.04] cursor-pointer'}`}>
-                {!unlocked && <div className="absolute top-2 right-2 text-gray-500"><Lock className="w-3.5 h-3.5" /></div>}
-                {isEquipped && <div className="absolute top-2 left-2 text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-neon-emerald/20 text-neon-emerald border border-neon-emerald/30">{t('equipped')}</div>}
-                <div className={`text-4xl mt-2 ${!unlocked ? 'grayscale' : ''}`}>{skin.emoji}</div><span className="text-xs font-medium text-gray-200 text-center">{translateSkinName(skin.name, language)}</span>
-                <span className="flex items-center gap-1 text-[10px] text-gray-500 uppercase tracking-wider"><CategoryIcon className="w-3 h-3" />{translateSkinCategory(skin.category, language)}</span>
-              </button>;
+            {filteredPets.map((pet) => {
+              const unlocked = profile.unlockedPetIds.includes(pet.id);
+              const isEquipped = profile.equippedPetId === pet.id;
+              const rarityStyle = RARITY_STYLES[pet.rarity] ?? RARITY_STYLES.Common;
+              const glowClass = RARITY_GLOW[pet.rarity] ?? '';
+              const textGlow = RARITY_TEXT_GLOW[pet.rarity] ?? '';
+              return (
+                <div
+                  key={pet.id}
+                  className={`group relative rounded-2xl border p-4 flex flex-col items-center gap-2 transition-all duration-300 ${!unlocked ? 'border-white/5 bg-white/[0.02] opacity-50' : isEquipped ? `${rarityStyle} cursor-pointer` : `border-white/10 bg-ink-700/40 cursor-pointer ${glowClass} hover:scale-[1.03]`}`}
+                >
+                  {!unlocked && <div className="absolute top-2 right-2 text-gray-500"><Lock className="w-3.5 h-3.5" /></div>}
+                  {isEquipped && <div className="absolute top-2 left-2 text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/30">{t('equipped')}</div>}
+                  <div className={`text-4xl mt-2 transition-transform duration-300 group-hover:scale-110 ${!unlocked ? 'grayscale' : ''} ${isEquipped ? 'drop-shadow-[0_0_12px_rgba(0,240,255,0.4)]' : ''}`}>{pet.emoji}</div>
+                  <span className={`text-xs font-medium text-center ${isEquipped ? textGlow : 'text-gray-200'}`}>{translatePetName(pet.name, language)}</span>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${rarityStyle}`}>{translateRarity(pet.rarity, language)}</span>
+                  {unlocked && !isEquipped && (
+                    <button
+                      type="button"
+                      onClick={() => setProfile(profileStore.setEquippedPet(pet.id))}
+                      className="mt-1 w-full px-3 py-1.5 rounded-lg text-[11px] font-bold border border-neon-cyan/30 bg-neon-cyan/10 text-neon-cyan hover:bg-neon-cyan/20 hover:scale-105 active:scale-95 transition-all duration-300"
+                    >
+                      {t('equip')}
+                    </button>
+                  )}
+                  {isEquipped && (
+                    <button
+                      type="button"
+                      disabled
+                      className="mt-1 w-full px-3 py-1.5 rounded-lg text-[11px] font-bold border border-neon-cyan/40 bg-neon-cyan/15 text-neon-cyan cursor-default"
+                    >
+                      {t('equipped')}
+                    </button>
+                  )}
+                </div>
+              );
             })}
           </div>
-        </div>
+        )}
+
+        {inventoryTab === 'skins' && (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            {filteredSkins.map((skin) => {
+              const unlocked = profile.unlockedSkinIds.includes(skin.id);
+              const isEquipped = profile.equippedSkins[skin.category] === skin.id;
+              const CategoryIcon = CATEGORY_ICONS[skin.category];
+              const rarityStyle = RARITY_STYLES[skin.rarity] ?? RARITY_STYLES.Common;
+              const glowClass = RARITY_GLOW[skin.rarity] ?? '';
+              const textGlow = RARITY_TEXT_GLOW[skin.rarity] ?? '';
+              return (
+                <div
+                  key={skin.id}
+                  className={`group relative rounded-2xl border p-4 flex flex-col items-center gap-2 transition-all duration-300 ${!unlocked ? 'border-white/5 bg-white/[0.02] opacity-50' : isEquipped ? `${rarityStyle} cursor-pointer` : `border-white/10 bg-ink-700/40 cursor-pointer ${glowClass} hover:scale-[1.03]`}`}
+                >
+                  {!unlocked && <div className="absolute top-2 right-2 text-gray-500"><Lock className="w-3.5 h-3.5" /></div>}
+                  {isEquipped && <div className="absolute top-2 left-2 text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-neon-emerald/20 text-neon-emerald border border-neon-emerald/30">{t('equipped')}</div>}
+                  <div className={`text-4xl mt-2 transition-transform duration-300 group-hover:scale-110 ${!unlocked ? 'grayscale' : ''} ${isEquipped ? 'drop-shadow-[0_0_12px_rgba(0,255,157,0.4)]' : ''}`}>{skin.emoji}</div>
+                  <span className={`text-xs font-medium text-center ${isEquipped ? textGlow : 'text-gray-200'}`}>{translateSkinName(skin.name, language)}</span>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${rarityStyle}`}>{translateRarity(skin.rarity, language)}</span>
+                  <span className="flex items-center gap-1 text-[10px] text-gray-500 uppercase tracking-wider"><CategoryIcon className="w-3 h-3" />{translateSkinCategory(skin.category, language)}</span>
+                  {unlocked && !isEquipped && (
+                    <button
+                      type="button"
+                      onClick={() => setProfile(profileStore.toggleEquipSkin(skin.id))}
+                      className="mt-1 w-full px-3 py-1.5 rounded-lg text-[11px] font-bold border border-neon-emerald/30 bg-neon-emerald/10 text-neon-emerald hover:bg-neon-emerald/20 hover:scale-105 active:scale-95 transition-all duration-300"
+                    >
+                      {t('equip')}
+                    </button>
+                  )}
+                  {isEquipped && (
+                    <button
+                      type="button"
+                      onClick={() => setProfile(profileStore.toggleEquipSkin(skin.id))}
+                      className="mt-1 w-full px-3 py-1.5 rounded-lg text-[11px] font-bold border border-neon-rose/30 bg-neon-rose/10 text-neon-rose hover:bg-neon-rose/20 hover:scale-105 active:scale-95 transition-all duration-300"
+                    >
+                      {t('unequip')}
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </section>
     </div>
   );
