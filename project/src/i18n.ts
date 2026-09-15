@@ -30,7 +30,8 @@ export type TranslationKey =
   | 'reportSubmitted' | 'selectReason' | 'reasonDisruption' | 'reasonHarassment' | 'reasonSpam'
   | 'localMockNotice' | 'roomDescriptionPhysics' | 'roomDescriptionCalculus' | 'roomDescriptionJavaScript'
   | 'roomDescriptionEnglish' | 'roomDescriptionChemistry' | 'roomDescriptionExam' | 'secureLocalLounge'
-  | 'noRealVoiceConnection' | 'globalStudents' | 'regionalStudents';
+  | 'noRealVoiceConnection' | 'globalStudents' | 'regionalStudents'
+  | 'displayName' | 'chooseAvatar';
 
 type TranslationDictionary = Record<LanguageCode, Record<TranslationKey, string>>;
 
@@ -64,6 +65,7 @@ export const TRANSLATIONS: TranslationDictionary = {
     localMockNotice: 'Offline mock lounge — no real voice connection is active.', roomDescriptionPhysics: 'Focused problem-solving and physics revision.', roomDescriptionCalculus: 'Advanced calculus practice and exam drills.', roomDescriptionJavaScript: 'Build and review JavaScript projects together.',
     roomDescriptionEnglish: 'Practice English conversation in a study-focused room.', roomDescriptionChemistry: 'Chemistry revision, formulas, and focused problem sets.', roomDescriptionExam: 'Quiet exam preparation and revision planning.', secureLocalLounge: 'Local safety layer',
     noRealVoiceConnection: 'No real-time voice connection', globalStudents: 'Global Students', regionalStudents: 'Regional Students',
+    displayName: 'Display Name', chooseAvatar: 'Choose Your Avatar',
   },
   de: {
     loadingStudyQuest: 'StudyQuest wird geladen...', studyDashboard: 'Lern-Dashboard', myProfile: 'Mein Profil',
@@ -93,6 +95,7 @@ export const TRANSLATIONS: TranslationDictionary = {
     localMockNotice: 'Offline-Demo-Lounge — keine echte Sprachverbindung ist aktiv.', roomDescriptionPhysics: 'Konzentriertes Problemlösen und Physik-Wiederholung.', roomDescriptionCalculus: 'Fortgeschrittene Analysis und Prüfungsübungen.', roomDescriptionJavaScript: 'JavaScript-Projekte gemeinsam bauen und wiederholen.',
     roomDescriptionEnglish: 'Englische Konversation in einem lernorientierten Raum üben.', roomDescriptionChemistry: 'Chemie-Wiederholung, Formeln und konzentrierte Aufgaben.', roomDescriptionExam: 'Ruhige Prüfungsvorbereitung und Lernplanung.', secureLocalLounge: 'Lokale Sicherheitsebene',
     noRealVoiceConnection: 'Keine Echtzeit-Sprachverbindung', globalStudents: 'Globale Schüler', regionalStudents: 'Regionale Schüler',
+    displayName: 'Anzeigename', chooseAvatar: 'Wähle deinen Avatar',
   },
   ja: {
     loadingStudyQuest: 'StudyQuestを読み込んでいます...', studyDashboard: '学習ダッシュボード', myProfile: 'マイプロフィール',
@@ -119,6 +122,7 @@ export const TRANSLATIONS: TranslationDictionary = {
     localMockNotice: 'オフラインのモックラウンジ — 実際の音声接続はありません。', roomDescriptionPhysics: '物理の問題演習と復習に集中します。', roomDescriptionCalculus: '上級微積分の練習と試験対策です。', roomDescriptionJavaScript: 'JavaScriptプロジェクトを一緒に作り、復習します。',
     roomDescriptionEnglish: '学習に集中した部屋で英会話を練習します。', roomDescriptionChemistry: '化学の復習、公式、集中問題演習です。', roomDescriptionExam: '静かな試験対策と復習計画のための部屋です。', secureLocalLounge: 'ローカル安全レイヤー',
     noRealVoiceConnection: 'リアルタイム音声接続なし', globalStudents: '世界の学生', regionalStudents: '地域の学生',
+    displayName: '表示名', chooseAvatar: 'アバターを選択',
   },
   ar: {
     loadingStudyQuest: 'جارٍ تحميل StudyQuest...', studyDashboard: 'لوحة الدراسة', myProfile: 'ملفي الشخصي',
@@ -145,6 +149,7 @@ export const TRANSLATIONS: TranslationDictionary = {
     localMockNotice: 'صالة تجريبية غير متصلة — لا يوجد اتصال صوتي حقيقي.', roomDescriptionPhysics: 'حل مسائل الفيزياء ومراجعتها بتركيز.', roomDescriptionCalculus: 'تدريب متقدم على التفاضل والتكامل واختبارات الامتحان.', roomDescriptionJavaScript: 'ابنِ وراجع مشاريع JavaScript معًا.',
     roomDescriptionEnglish: 'تدرّب على المحادثة الإنجليزية في غرفة مخصصة للدراسة.', roomDescriptionChemistry: 'مراجعة الكيمياء والقوانين وحل المسائل بتركيز.', roomDescriptionExam: 'استعداد هادئ للامتحانات وتخطيط المراجعة.', secureLocalLounge: 'طبقة أمان محلية',
     noRealVoiceConnection: 'لا يوجد اتصال صوتي مباشر', globalStudents: 'الطلاب عالميًا', regionalStudents: 'الطلاب إقليميًا',
+    displayName: 'اسم العرض', chooseAvatar: 'اختر صورتك الرمزية',
   },
   fr: {
     loadingStudyQuest: 'Chargement de StudyQuest...', studyDashboard: 'Tableau de bord', myProfile: 'Mon profil',
@@ -171,6 +176,7 @@ export const TRANSLATIONS: TranslationDictionary = {
     localMockNotice: 'Salon simulé hors ligne — aucune connexion vocale réelle.', roomDescriptionPhysics: 'Résolution de problèmes et révision de physique.', roomDescriptionCalculus: 'Pratique avancée du calcul et exercices d’examen.', roomDescriptionJavaScript: 'Construisez et révisez des projets JavaScript ensemble.',
     roomDescriptionEnglish: 'Pratiquez la conversation anglaise dans une salle axée sur les études.', roomDescriptionChemistry: 'Révision de chimie, formules et exercices ciblés.', roomDescriptionExam: 'Préparation calme aux examens et planification des révisions.', secureLocalLounge: 'Couche de sécurité locale',
     noRealVoiceConnection: 'Aucune connexion vocale en temps réel', globalStudents: 'Élèves du monde', regionalStudents: 'Élèves de la région',
+    displayName: 'Nom affiché', chooseAvatar: 'Choisis ton avatar',
   },
 };
 

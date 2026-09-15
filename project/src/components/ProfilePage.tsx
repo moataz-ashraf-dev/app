@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Lock, Star, Sparkles, Coins, Gem, Clock3, Shirt, Crown, Car, Glasses } from 'lucide-react';
+import { Lock, Star, Sparkles, Coins, Gem, Clock3, Shirt, Crown, Car, Glasses, User, Pencil } from 'lucide-react';
 import { store } from '@/lib/store';
 import { profileStore, PET_CATALOG, SKIN_CATALOG, SKIN_CATEGORIES, type ProfileData, type SkinCategory } from '@/lib/profileStore';
 import { type LanguageCode, type TranslationKey, translatePetName, translateRarity, translateSkinName, translateSkinCategory } from '@/lib/i18n';
@@ -13,6 +13,17 @@ const RARITY_STYLES: Record<string, string> = {
 const STARS_PER_COMPLETED_SESSION = 5;
 const STARS_PER_LEVEL = 50;
 
+const AVATAR_PRESETS = ['🐉', '🐺', '🦊', '🐢'] as const;
+const PROFILE_HEADER_KEY = 'studyquest_profile_header_v1';
+
+function loadHeaderState(): { name: string; selectedAvatar: string } {
+  try {
+    const raw = localStorage.getItem(PROFILE_HEADER_KEY);
+    if (raw) return JSON.parse(raw) as { name: string; selectedAvatar: string };
+  } catch { /* ignore */ }
+  return { name: 'StudyHero', selectedAvatar: '🐉' };
+}
+
 type Props = { language: LanguageCode; t: (key: TranslationKey) => string };
 
 export default function ProfilePage({ language, t }: Props) {
@@ -23,6 +34,8 @@ export default function ProfilePage({ language, t }: Props) {
   const [petName, setPetName] = useState('Sparky');
   const [petLevel, setPetLevel] = useState(4);
   const [profile, setProfile] = useState<ProfileData>(() => profileStore.load());
+  const [name, setName] = useState(() => loadHeaderState().name);
+  const [selectedAvatar, setSelectedAvatar] = useState(() => loadHeaderState().selectedAvatar);
 
   useEffect(() => {
     const local = store.load();
@@ -30,6 +43,10 @@ export default function ProfilePage({ language, t }: Props) {
     const completed = local.sessions.filter((s) => s.completed);
     setCompletedSessions(completed.length); setStudyMinutes(completed.reduce((sum, s) => sum + s.duration_minutes, 0));
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem(PROFILE_HEADER_KEY, JSON.stringify({ name, selectedAvatar }));
+  }, [name, selectedAvatar]);
 
   const studyHours = useMemo(() => Math.round((studyMinutes / 60) * 10) / 10, [studyMinutes]);
   const lifetimeStars = completedSessions * STARS_PER_COMPLETED_SESSION;
@@ -42,6 +59,52 @@ export default function ProfilePage({ language, t }: Props) {
     <div className="flex flex-col items-center gap-10 animate-fade-in pb-8">
       <section className="w-full flex flex-col items-center gap-5">
         <MonsterViewport pet={{ ...activePet, name: activePetDisplayName }} petLevel={petLevel} equippedSkins={equippedSkinDefs} language={language} t={t} />
+
+        <div className="w-full max-w-sm flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <label className="text-xs font-medium text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
+              <User className="w-3.5 h-3.5 text-neon-cyan" />
+              {t('displayName')}
+            </label>
+            <div className="relative flex items-center">
+              <span className="absolute left-3 text-2xl pointer-events-none select-none">{selectedAvatar}</span>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                maxLength={20}
+                className="w-full pl-14 pr-10 py-3 rounded-xl glass border border-white/10 text-sm font-display font-bold text-gray-200
+                  bg-transparent outline-none transition-all duration-300
+                  focus:border-neon-cyan/40 focus:neon-border-cyan placeholder:text-gray-600"
+                placeholder={t('displayName')}
+              />
+              <Pencil className="absolute right-3 w-4 h-4 text-gray-600 pointer-events-none" />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-xs font-medium text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-neon-cyan" />
+              {t('chooseAvatar')}
+            </label>
+            <div className="grid grid-cols-4 gap-3">
+              {AVATAR_PRESETS.map((emoji) => (
+                <button
+                  key={emoji}
+                  type="button"
+                  onClick={() => setSelectedAvatar(emoji)}
+                  className={`aspect-square rounded-xl border flex items-center justify-center text-3xl transition-all duration-300
+                    ${selectedAvatar === emoji
+                      ? 'border-neon-cyan/50 bg-neon-cyan/10 neon-border-cyan scale-105'
+                      : 'border-white/10 bg-ink-700/40 hover:border-white/20 hover:scale-105'}`}
+                >
+                  {emoji}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
         <div className="flex items-center gap-3 flex-wrap justify-center">
           <div className="flex items-center gap-2 px-4 py-2 rounded-xl glass border border-white/10"><Sparkles className="w-4 h-4 text-neon-cyan" /><span className="text-xs text-gray-500">{t('studentLevel')}</span><span className="font-mono font-bold text-sm text-neon-cyan neon-text-cyan">{studentLevel}</span></div>
           <div className="flex items-center gap-2 px-4 py-2 rounded-xl glass border border-white/10"><Star className="w-4 h-4 text-neon-amber fill-neon-amber" /><span className="text-xs text-gray-500">{t('lifetimeGoldenStars')}</span><span className="font-mono font-bold text-sm text-neon-amber neon-text-amber">{lifetimeStars.toLocaleString()}</span></div>
